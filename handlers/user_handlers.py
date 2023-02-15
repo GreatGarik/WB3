@@ -1,4 +1,4 @@
-from aiogram import Dispatcher, Router
+from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import Command, CommandStart, Text
 from lexicon.lexicon_ru import LEXICON_RU

@@ -1,4 +1,4 @@
-from aiogram import Dispatcher, Bot
+from aiogram import Bot
 from aiogram.types import BotCommand
 
 
@@ -11,13 +11,3 @@ async def set_main_menu(bot: Bot):
             command='/help',
             description='Если хочешь узнать, что я делаю')]
     await bot.set_my_commands(main_menu_commands)
-
-'''
-    main_menu_commands = [
-        types.BotCommand(command='/start', description='На старт!'),
-        types.BotCommand(command='/help', description='Если хочешь узнать, что я делаю'),
-       # types.BotCommand(command='/command_3', description='command_3 desription'),
-        #types.BotCommand(command='/command_4', description='command_4 desription')
-    ]
-    await dp.register_message_handler(main_menu_commands)
-'''

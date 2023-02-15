@@ -10,7 +10,6 @@ from handlers import user_handlers, other_handlers
 from keyboards.menu_button import set_main_menu
 from parser.parser_get import parser
 
-# from ids import USER_IDS, ADMIN_ID, KATERINA_ID
 
 # Инициализируем логгер
 logger = logging.getLogger(__name__)
