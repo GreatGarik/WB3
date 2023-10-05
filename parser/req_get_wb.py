@@ -1,10 +1,12 @@
 import requests
-from ids import cookies, headers
+import json
+from ids import cookies, headers, data
 
 
 def superdata() -> list:
+    '''
     response = requests.post('https://ru-basket-api.wildberries.ru/lk/basket/items', cookies=cookies, headers=headers)
-    my_dict = response.json()
+    my_dict = json.loads(response.text)
 
     data = {}
 
@@ -13,6 +15,9 @@ def superdata() -> list:
         data[f'basketItems[{num}][quantity]'] = my_dict['value'][num]['quantity']
         data[f'basketItems[{num}][cod1S]'] = my_dict['value'][num]['cod1S']
         data[f'basketItems[{num}][targetUrl]'] = my_dict['value'][num]['targetUrl']
+
+
+    '''
 
     params = ''
 
@@ -23,14 +28,19 @@ def superdata() -> list:
         headers=headers,
         data=data,
     )
-    answer = response.json()
+    answer = json.loads(response.text)
 
     sup = []
 
     for item in answer['value']['data']['basket']['basketItems']:
         sto = [i['qty'] for i in item['stocks']]  # Считаем количество на складах
-        sup.append({'keys': str(item['cod1S']) + '-' + str(item['characteristicId']), 'name': item['goodsName'] + ' ' + item['brandName'],
-                    'prices': item['priceWithCouponAndDiscount'], 'qty': sum(sto), 'size': str(item['characteristicId'])})
+        try:
+            sup.append({'keys': str(item['cod1S']) + '-' + str(item['characteristicId']),
+                        'name': item['goodsName'] + ' ' + item['brandName'],
+                        'prices': item['priceWithCouponAndDiscount'], 'qty': sum(sto),
+                        'size': str(item['characteristicId'])})
+        except KeyError:
+            pass
 
     return sup
 

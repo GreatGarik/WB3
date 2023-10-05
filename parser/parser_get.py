@@ -21,7 +21,7 @@ def parser():
             my_dict[item['keys']]['min_price'] = item['prices']
             my_dict[item['keys']]['max_price'] = item['prices']
             my_dict[item['keys']]['name'] = item['name']
-        elif item['prices'] == 0:
+        elif item['prices'] <= 0:
             continue
         elif my_dict[item['keys']]['actual_price'] == item['prices']:
             continue

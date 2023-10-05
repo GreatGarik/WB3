@@ -10,10 +10,8 @@ from handlers import user_handlers, other_handlers
 from keyboards.menu_button import set_main_menu
 from parser.parser_get import parser
 
-
 # Инициализируем логгер
 logger = logging.getLogger(__name__)
-
 
 # Создаем экземпляр расписания
 scheduler: AsyncIOScheduler = AsyncIOScheduler()
@@ -61,8 +59,6 @@ async def main():
     # Регистрируем все хэндлеры
     dp.include_router(other_handlers.router)
     dp.include_router(user_handlers.router)
-
-
 
     # Запускаем polling
     scheduler.start()
