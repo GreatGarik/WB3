@@ -14,5 +14,4 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }} 
           script: cd ${{ secrets.PROJECT_PATH }} && git pull
