@@ -25,7 +25,7 @@ async def send_message(bot, admin_id, katerina_id, slp=None):
     if lst:
         for text in lst:
             await bot.send_message(admin_id, text=text)
-            await bot.bot.send_message(katerina_id, text=text)
+            await bot.send_message(katerina_id, text=text)
 
 
 # Функция конфигурирования и запуска бота
@@ -50,8 +50,8 @@ async def main():
     await send_message(bot, config.tg_bot.admin_id, config.tg_bot.katerina_id)
 
     # Добавляем функцию в расписание
-    scheduler.add_job(send_message, "interval", hours=1,
-                      args=(dp, config.tg_bot.admin_id, config.tg_bot.katerina_id, True))
+    scheduler.add_job(send_message, "interval", minutes=60,
+                      args=(bot, config.tg_bot.admin_id, config.tg_bot.katerina_id, True))
 
     # Настраиваем кнопку Menu
     await set_main_menu(bot)
