@@ -47,7 +47,9 @@ async def main():
     dp: Dispatcher = Dispatcher()
 
     # Отправка сообщения при запуске
+    await bot.send_message(config.tg_bot.admin_id, text='Бот запущен')
     await send_message(bot, config.tg_bot.admin_id, config.tg_bot.katerina_id)
+
 
     # Добавляем функцию в расписание
     scheduler.add_job(send_message, "interval", minutes=60,
