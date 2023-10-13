@@ -13,7 +13,9 @@ def parser():
     sup: list = superdata()
 
     for item in sup:  # Прогоняем названия товаров
-        if item['keys'] not in my_dict:  # Если это новый товар, то добавляем цены
+        if item['prices'] <= 0:
+            continue
+        elif item['keys'] not in my_dict:  # Если это новый товар, то добавляем цены
             my_dict[item['keys']] = {}
             my_dict[item['keys']]['actual_price'] = item['prices']
             my_dict[item['keys']][
@@ -21,8 +23,6 @@ def parser():
             my_dict[item['keys']]['min_price'] = item['prices']
             my_dict[item['keys']]['max_price'] = item['prices']
             my_dict[item['keys']]['name'] = item['name']
-        elif item['prices'] <= 0:
-            continue
         elif my_dict[item['keys']]['actual_price'] == item['prices']:
             continue
         elif my_dict[item['keys']]['actual_price'] >= item['prices']:
