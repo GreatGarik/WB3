@@ -18,12 +18,11 @@ def superdata() -> list:
 
 
     '''
-    try:
-        with open('items.txt') as datafile:
-            text = datafile.read()
-            data = ast.literal_eval(text)
-    except:
-        data = {}
+
+    with open('items.txt') as datafile:
+        text = datafile.read()
+        data = ast.literal_eval(text)
+
 
     params = ''
 
