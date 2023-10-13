@@ -1,7 +1,7 @@
 import requests
 import json
-from ids import cookies, headers, data
-
+import ast
+from ids import cookies, headers
 
 def superdata() -> list:
     '''
@@ -18,6 +18,12 @@ def superdata() -> list:
 
 
     '''
+    try:
+        with open('items.txt') as datafile:
+            text = datafile.read()
+            data = ast.literal_eval(text)
+    except:
+        data = {}
 
     params = ''
 
