@@ -24,6 +24,7 @@ async def process_echo_message(message: Message, bot: Bot):
     file_path = file.file_path
     await bot.download_file(file_path, 'items.txt')
 
+
 # # Хэндлер для текстовых сообщений, которые не попали в другие хэндлеры
 @router.message()
 async def answer_all(message: Message):
