@@ -8,6 +8,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from config_data.config import Config, load_config
 from handlers import user_handlers, other_handlers
 from keyboards.menu_button import set_main_menu
+from aiogram.client.default import DefaultBotProperties
 from parser.parser_get import parser
 
 # Инициализируем логгер
@@ -24,8 +25,9 @@ async def send_message(bot, admin_id, katerina_id, slp=None):
     lst, lenkey = parser()
     if lst:
         for text in lst:
+            await asyncio.sleep(1)
             await bot.send_message(admin_id, text=text)
-            await bot.send_message(katerina_id, text=text)
+            #await bot.send_message(katerina_id, text=text)
 
 
 # Функция конфигурирования и запуска бота
@@ -33,6 +35,7 @@ async def main():
     # Конфигурируем логирование
     logging.basicConfig(
         level=logging.INFO,
+        filename="py_log.log", filemode="a",
         format=u'%(filename)s:%(lineno)d #%(levelname)-8s '
                u'[%(asctime)s] - %(name)s - %(message)s')
 
@@ -43,7 +46,7 @@ async def main():
     config: Config = load_config()
 
     # Инициализируем бот и диспетчер
-    bot: Bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
+    bot: Bot = Bot(token=config.tg_bot.token, default=DefaultBotProperties(parse_mode='HTML'))
     dp: Dispatcher = Dispatcher()
 
     # Отправка сообщения при запуске

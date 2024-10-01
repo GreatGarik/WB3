@@ -12,6 +12,7 @@ def parser():
 
     sup: list = superdata()
 
+
     for item in sup:  # Прогоняем названия товаров
         if item['prices'] <= 0:
             continue
@@ -27,7 +28,7 @@ def parser():
             continue
         elif my_dict[item['keys']]['actual_price'] >= item['prices']:
             lst.append(
-                f"""Ура! Товар <b><a href="{my_dict[item['keys']]['href']}">{my_dict[item['keys']]['name']}</a></b> подешевел и теперь стоит <b>{item['prices']}</b> руб. вместо <i>{my_dict[item['keys']]['actual_price']}</i> руб.
+                f"""Товар <b><a href="{my_dict[item['keys']]['href']}">{my_dict[item['keys']]['name']}</a></b> подешевел и теперь стоит <b>{item['prices']}</b> руб. вместо <i>{my_dict[item['keys']]['actual_price']}</i> руб.
     В наличии осталось {item['qty']} шт.
     Самая низкая цена, что я видел раньше была {my_dict[item['keys']]['min_price']}  руб, а максимальная {my_dict[item['keys']]['max_price']}""")
 

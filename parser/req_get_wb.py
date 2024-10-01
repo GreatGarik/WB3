@@ -20,8 +20,8 @@ def superdata() -> list:
     '''
 
     with open('items.txt') as datafile:
-        text = datafile.read()
-        data = ast.literal_eval(text)
+        data = datafile.read()
+        # data = ast.literal_eval(text)
 
 
     params = ''
