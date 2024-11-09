@@ -6,8 +6,12 @@ from ids import cookies, headers
 def superdata() -> list:
     '''
     response = requests.post('https://ru-basket-api.wildberries.ru/lk/basket/items', cookies=cookies, headers=headers)
+    print(response.text)
+    
     my_dict = json.loads(response.text)
 
+    
+    
     data = {}
 
     for num, item in enumerate(my_dict['value']):
@@ -21,7 +25,7 @@ def superdata() -> list:
 
     with open('items.txt') as datafile:
         data = datafile.read()
-        #data = ast.literal_eval(text)
+        # data = ast.literal_eval(text)
 
 
     params = ''
@@ -46,7 +50,6 @@ def superdata() -> list:
                         'size': str(item['characteristicId'])})
         except KeyError:
             pass
-
     return sup
 
 

@@ -4,11 +4,14 @@ import random
 
 from aiogram import Bot, Dispatcher
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from aiogram.client.bot import DefaultBotProperties
+from aiogram.enums import ParseMode
 
 from config_data.config import Config, load_config
 from handlers import user_handlers, other_handlers
 from keyboards.menu_button import set_main_menu
 from parser.parser_get import parser
+
 
 # Инициализируем логгер
 logger = logging.getLogger(__name__)
@@ -21,7 +24,7 @@ scheduler: AsyncIOScheduler = AsyncIOScheduler()
 async def send_message(bot, admin_id, katerina_id, slp=None):
     if slp:
         await asyncio.sleep(random.randint(0, 600))
-    lst, lenkey = parser()
+    lst, lenkey = await parser()
     if lst:
         for text in lst:
             await bot.send_message(admin_id, text=text)
@@ -44,7 +47,7 @@ async def main():
     config: Config = load_config()
 
     # Инициализируем бот и диспетчер
-    bot: Bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
+    bot: Bot = Bot(token=config.tg_bot.token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp: Dispatcher = Dispatcher()
 
     # Отправка сообщения при запуске
