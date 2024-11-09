@@ -13,7 +13,7 @@ async def superdata():
         # browser = p.chromium.launch()
 
         # инициализация браузера (с явным открытием браузера)
-        browser = await p.chromium.launch(channel='chrome', headless=True)
+        browser = await p.chromium.launch(headless=True)
 
         # инициализация страницы
 
@@ -31,7 +31,7 @@ async def superdata():
         soup = BeautifulSoup(await page.content(), 'html.parser')
         #soup = BeautifulSoup(await page.content(), 'lxml')
         tst = soup.find_all('a', class_="good-info__title j-product-popup")
-        rrr = soup.find_all('div', class_="list-item__price-new wallet")
+        rrr = soup.find_all('div', class_="list-item__price-wallet")
         await browser.close()
 
         #name_list = [item.text.replace(', ', ' ').strip() for item in tst]
