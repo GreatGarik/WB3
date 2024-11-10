@@ -30,14 +30,14 @@ async def superdata():
 
         soup = BeautifulSoup(await page.content(), 'html.parser')
         #soup = BeautifulSoup(await page.content(), 'lxml')
-        tst = soup.find_all('a', class_="good-info__title j-product-popup")
-        rrr = soup.find_all('div', class_="list-item__price-wallet")
+        all_links = soup.find_all('a', class_="good-info__title j-product-popup")
+        all_prices = soup.find_all('div', class_="list-item__price-wallet")
         await browser.close()
 
         #name_list = [item.text.replace(', ', ' ').strip() for item in tst]
-        prices_list = [i.text.replace(u'\xa0', u'').strip('₽') for i in rrr]
+        prices_list = [i.text.replace(u'\xa0', u'').strip('₽') for i in all_prices]
         #print(*zip(name_list, prices_list))
-        for number, item in enumerate(tst[:len(prices_list)]):
+        for number, item in enumerate(all_links[:len(prices_list)]):
 
             cod1s: str = item.get('href').split('/')[4]
             characteristicid: str = item.get('href').split('=')[-1]
