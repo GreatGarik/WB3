@@ -30,7 +30,7 @@ async def superdata():
 
         soup = BeautifulSoup(await page.content(), 'html.parser')
         #soup = BeautifulSoup(await page.content(), 'lxml')
-        all_links = soup.find_all('a', class_="good-info__title j-product-popup")
+        all_links = soup.find_all('a', class_="good-info__title")
         all_prices = soup.find_all('div', class_="list-item__price-wallet")
         await browser.close()
 
