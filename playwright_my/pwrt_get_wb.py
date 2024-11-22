@@ -54,7 +54,7 @@ async def superdata():
         # cookies = await context.cookies()
         # сделать скриншот
         # print(cookies)
-        #print(sup)
+        print(sup)
         return sup
 
 
