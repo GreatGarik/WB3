@@ -19,6 +19,7 @@ async def superdata():
         # инициализация страницы
         context = await browser.new_context(storage_state='state.json', user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36')
 
+
         # переход по url адресу:
         page = await context.new_page()
         await page.goto('https://ozon.ru/cart')

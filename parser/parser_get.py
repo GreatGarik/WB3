@@ -15,6 +15,7 @@ async def parser():
 
     sup: list[dict] = await superdata()
 
+
     for item in sup:  # Прогоняем названия товаров
         if item['prices'] <= 0:
             continue
