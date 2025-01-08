@@ -1,8 +1,11 @@
 import pickle
-from .req_get_wb import superdata
+import asyncio
+# from .req_get_wb import superdata
+from playwright_my.pwrt_get_wb import superdata
+#from playwright_my.s_pwrt_get_wb import superdata
 
 
-def parser():
+async def parser():
     lst = []
     try:
         with open('items_in_shopping_cart_new.pkl', 'rb') as rpkl:
@@ -10,8 +13,7 @@ def parser():
     except:
         my_dict = {}
 
-    sup: list = superdata()
-
+    sup: list[dict] = await superdata()
 
     for item in sup:  # Прогоняем названия товаров
         if item['prices'] <= 0:
@@ -26,9 +28,9 @@ def parser():
             my_dict[item['keys']]['name'] = item['name']
         elif my_dict[item['keys']]['actual_price'] == item['prices']:
             continue
-        elif my_dict[item['keys']]['actual_price']*0.85 >= item['prices']:
+        elif my_dict[item['keys']]['actual_price'] >= item['prices']:
             lst.append(
-                f"""Товар <b><a href="{my_dict[item['keys']]['href']}">{my_dict[item['keys']]['name']}</a></b> подешевел и теперь стоит <b>{item['prices']}</b> руб. вместо <i>{my_dict[item['keys']]['actual_price']}</i> руб.
+                f"""Ура! Товар <b><a href="{my_dict[item['keys']]['href']}">{my_dict[item['keys']]['name']}</a></b> подешевел и теперь стоит <b>{item['prices']}</b> руб. вместо <i>{my_dict[item['keys']]['actual_price']}</i> руб.
     В наличии осталось {item['qty']} шт.
     Самая низкая цена, что я видел раньше была {my_dict[item['keys']]['min_price']}  руб, а максимальная {my_dict[item['keys']]['max_price']}""")
 
@@ -42,11 +44,11 @@ def parser():
             my_dict[item['keys']]['actual_price'] = item['prices']
 
     # удаляем из базы товары, которые исчезли из корзины
-    keysinsup = [i['keys'] for i in sup]  # ключи с сайта
-    fordel = [item for item in my_dict if item not in keysinsup]  # список ключей, которые нужно удалить
+    #keysinsup = [i['keys'] for i in sup]  # ключи с сайта
+    #fordel = [item for item in my_dict if item not in keysinsup]  # список ключей, которые нужно удалить
 
-    for it in fordel:
-        del my_dict[it]  # удаление ключей
+    #for it in fordel:
+     #   del my_dict[it]  # удаление ключей
 
     with open('items_in_shopping_cart_new.pkl', 'wb') as wpkl:
         pickle.dump(my_dict, wpkl)

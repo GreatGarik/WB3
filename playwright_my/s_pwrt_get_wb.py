@@ -24,7 +24,6 @@ def superdata() -> list:
         page.wait_for_timeout(5000)
         # await context.storage_state(path='state.json')
 
-
         # await page.goto('https://www.wildberries.ru/lk/basket')
 
         soup = BeautifulSoup(page.content(), 'html.parser')

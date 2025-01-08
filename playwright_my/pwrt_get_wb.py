@@ -13,13 +13,12 @@ async def superdata():
         # browser = p.chromium.launch()
 
         # инициализация браузера (с явным открытием браузера)
-        browser = await p.chromium.launch(headless=True)
+        browser = await p.chromium.launch(channel='chrome', headless=True)
 
         # инициализация страницы
 
         context = await browser.new_context()
         context = await browser.new_context(storage_state='state.json')
-
 
         # переход по url адресу:
         page = await context.new_page()
@@ -31,14 +30,14 @@ async def superdata():
 
         soup = BeautifulSoup(await page.content(), 'html.parser')
         #soup = BeautifulSoup(await page.content(), 'lxml')
-        all_links = soup.find_all('a', class_="good-info__title")
-        all_prices = soup.find_all('div', class_="list-item__price-new")
+        tst = soup.find_all('a', class_="good-info__title j-product-popup")
+        rrr = soup.find_all('div', class_="list-item__price-new wallet")
         await browser.close()
 
         #name_list = [item.text.replace(', ', ' ').strip() for item in tst]
-        prices_list = [i.text.replace(u'\xa0', u'').strip('₽') for i in all_prices]
+        prices_list = [i.text.replace(u'\xa0', u'').strip('₽') for i in rrr]
         #print(*zip(name_list, prices_list))
-        for number, item in enumerate(all_links[:len(prices_list)]):
+        for number, item in enumerate(tst[:len(prices_list)]):
 
             cod1s: str = item.get('href').split('/')[4]
             characteristicid: str = item.get('href').split('=')[-1]
@@ -55,7 +54,7 @@ async def superdata():
         # cookies = await context.cookies()
         # сделать скриншот
         # print(cookies)
-        print(sup)
+        #print(sup)
         return sup
 
 

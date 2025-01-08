@@ -7,30 +7,27 @@ import asyncio
 async def superdata():
     sup = []
 
+    # открыть соединение
     async with async_playwright() as p:
-        # Запускаем браузер в обычном режиме с отключением автоматизации
-        browser = await p.chromium.launch(headless=False, args=["--disable-blink-features=AutomationControlled"])
+        # инициализация браузера (без видимого открытия браузера)
+        # browser = p.chromium.launch()
 
-        # Создаем новый контекст с пользовательским агентом
+        # инициализация браузера (с явным открытием браузера)
+        browser = await p.chromium.launch(channel='chrome', headless=False)
+
+        # инициализация страницы
+
+        context = await browser.new_context()
         context = await browser.new_context(storage_state='state.json')
 
-        # Создаем новую страницу
+        # переход по url адресу:
         page = await context.new_page()
+        await page.goto('https://www.wildberries.ru/lk/basket')
+        await page.wait_for_timeout(50000)
+        #await context.storage_state(path='state.json')
 
-        # Переходим на нужный сайт
-        await page.goto('https://ozon.ru/cart')
-
-        # Ожидаем 10 секунд
-        await asyncio.sleep(60)
-
-        await context.storage_state(path='state.json')
-
-        # Ваши действия со страницей
-        # ...
-
-        # Закрываем браузер
+        await page.goto('https://www.wildberries.ru/lk/basket')
         await browser.close()
-
 
 
 
