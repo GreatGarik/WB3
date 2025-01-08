@@ -23,7 +23,7 @@ async def parser():
             my_dict[item['keys']] = {}
             my_dict[item['keys']]['actual_price'] = item['prices']
             my_dict[item['keys']][
-                'href'] = f"https://www.ozon.ru/product/{item['keys']}"
+                'href'] = f"https://www.wildberries.ru/catalog/{item['keys'].split('-')[0]}/detail.aspx?size={item['size']}"
             my_dict[item['keys']]['min_price'] = item['prices']
             my_dict[item['keys']]['max_price'] = item['prices']
             my_dict[item['keys']]['name'] = item['name']
