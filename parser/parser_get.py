@@ -1,8 +1,11 @@
 import pickle
-from .req_get_wb import superdata
+import asyncio
+# from .req_get_wb import superdata
+from playwright_my.pwrt_get_wb import superdata
+#from playwright_my.s_pwrt_get_wb import superdata
 
 
-def parser():
+async def parser():
     lst = []
     try:
         with open('items_in_shopping_cart_new.pkl', 'rb') as rpkl:
@@ -10,7 +13,7 @@ def parser():
     except:
         my_dict = {}
 
-    sup: list = superdata()
+    sup: list[dict] = await superdata()
 
 
     for item in sup:  # Прогоняем названия товаров
@@ -42,11 +45,11 @@ def parser():
             my_dict[item['keys']]['actual_price'] = item['prices']
 
     # удаляем из базы товары, которые исчезли из корзины
-    keysinsup = [i['keys'] for i in sup]  # ключи с сайта
-    fordel = [item for item in my_dict if item not in keysinsup]  # список ключей, которые нужно удалить
+    #keysinsup = [i['keys'] for i in sup]  # ключи с сайта
+    #fordel = [item for item in my_dict if item not in keysinsup]  # список ключей, которые нужно удалить
 
-    for it in fordel:
-        del my_dict[it]  # удаление ключей
+    #for it in fordel:
+     #   del my_dict[it]  # удаление ключей
 
     with open('items_in_shopping_cart_new.pkl', 'wb') as wpkl:
         pickle.dump(my_dict, wpkl)
