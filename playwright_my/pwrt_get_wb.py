@@ -13,7 +13,7 @@ async def superdata():
         # browser = p.chromium.launch()
 
         # инициализация браузера (с явным открытием браузера)
-        browser = await p.chromium.launch(channel='chrome', headless=True)
+        browser = await p.chromium.launch(channel='chrome', headless=False)
 
         # инициализация страницы
 
@@ -24,6 +24,8 @@ async def superdata():
         page = await context.new_page()
         await page.goto('https://www.wildberries.ru/lk/basket')
         await page.wait_for_timeout(5000)
+        await asyncio.sleep(120)
+
         # await context.storage_state(path='state.json')
 
         # await page.goto('https://www.wildberries.ru/lk/basket')
@@ -31,7 +33,7 @@ async def superdata():
         soup = BeautifulSoup(await page.content(), 'html.parser')
         #soup = BeautifulSoup(await page.content(), 'lxml')
         tst = soup.find_all('a', class_="good-info__title j-product-popup")
-        rrr = soup.find_all('div', class_="list - item__price - wallet")
+        rrr = soup.find_all('div', class_="list-item__price-new wallet")
 
         await browser.close()
 

@@ -22,7 +22,7 @@ scheduler: AsyncIOScheduler = AsyncIOScheduler()
 async def send_message(bot, admin_id, katerina_id, slp=None):
     if slp:
         await asyncio.sleep(random.randint(0, 600))
-    lst, lenkey = parser()
+    lst, lenkey = await parser()
     if lst:
         for text in lst:
             await asyncio.sleep(1)
