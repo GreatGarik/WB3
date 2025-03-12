@@ -26,14 +26,14 @@ async def superdata():
         await page.wait_for_timeout(5000)
         await asyncio.sleep(120)
 
-        # await context.storage_state(path='state.json')
+        await context.storage_state(path='state.json')
 
         # await page.goto('https://www.wildberries.ru/lk/basket')
 
         soup = BeautifulSoup(await page.content(), 'html.parser')
         #soup = BeautifulSoup(await page.content(), 'lxml')
         tst = soup.find_all('a', class_="good-info__title j-product-popup")
-        rrr = soup.find_all('div', class_="list-item__price-new wallet")
+        rrr = soup.find_all('div', class_="list-item__price-new")
 
         await browser.close()
 
