@@ -13,7 +13,7 @@ async def superdata():
         # browser = p.chromium.launch()
 
         # инициализация браузера (с явным открытием браузера)
-        browser = await p.chromium.launch(channel='chrome', headless=False)
+        browser = await p.chromium.launch(channel='chrome', headless=True)
 
         # инициализация страницы
 
