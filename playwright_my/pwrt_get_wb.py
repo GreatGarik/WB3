@@ -1,3 +1,4 @@
+import logging
 from time import sleep
 from playwright.async_api import async_playwright, expect
 from bs4 import BeautifulSoup
@@ -13,18 +14,37 @@ async def superdata():
         # browser = p.chromium.launch()
 
         # инициализация браузера (с явным открытием браузера)
-        browser = await p.chromium.launch(channel='chrome', headless=True)
+        browser = await p.chromium.launch(headless=True, args=[
+        '--disable-blink-features=AutomationControlled',
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-infobars',
+        '--disable-extensions',
+        '--window-size=1920,1080'
+    ])
 
         # инициализация страницы
+        '''
+        context = await browser.new_context(
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        )
+        '''
+        context = await browser.new_context(
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            storage_state='state.json'
+        )
 
-        context = await browser.new_context()
-        context = await browser.new_context(storage_state='state.json')
+
 
         # переход по url адресу:
         page = await context.new_page()
+        # Отключение автоматизации
+        await page.evaluate("navigator.__proto__.webdriver = undefined")
         await page.goto('https://www.wildberries.ru/lk/basket')
-        await page.wait_for_timeout(5000)
-        await asyncio.sleep(120)
+        #await page.wait_for_timeout(5000)
+        #await asyncio.sleep(120)
+        await page.wait_for_selector('.basket-section__header', timeout=10000)
+
 
         await context.storage_state(path='state.json')
 

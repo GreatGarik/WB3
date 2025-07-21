@@ -55,7 +55,7 @@ async def main():
 
 
     # Добавляем функцию в расписание
-    scheduler.add_job(send_message, "interval", minutes=60,
+    scheduler.add_job(send_message, "interval", minutes=30,
                       args=(bot, config.tg_bot.admin_id, config.tg_bot.katerina_id, True))
 
     # Настраиваем кнопку Menu

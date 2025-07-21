@@ -15,7 +15,6 @@ async def parser():
 
     sup: list[dict] = await superdata()
 
-
     for item in sup:  # Прогоняем названия товаров
         if item['prices'] <= 0:
             continue
@@ -29,7 +28,7 @@ async def parser():
             my_dict[item['keys']]['name'] = item['name']
         elif my_dict[item['keys']]['actual_price'] == item['prices']:
             continue
-        elif my_dict[item['keys']]['actual_price'] >= item['prices']:
+        elif my_dict[item['keys']]['actual_price']*0.9 >= item['prices'] or my_dict[item['keys']]['min_price'] > item['prices']:
             lst.append(
                 f"""Товар <b><a href="{my_dict[item['keys']]['href']}">{my_dict[item['keys']]['name']}</a></b> подешевел и теперь стоит <b>{item['prices']}</b> руб. вместо <i>{my_dict[item['keys']]['actual_price']}</i> руб.
     В наличии осталось {item['qty']} шт.
