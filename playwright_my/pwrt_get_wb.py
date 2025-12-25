@@ -107,7 +107,8 @@ async def extract_data(soup):
         try:
             # Извлечение названия товара и его ссылки
             item_link = block.find('a', class_="img-plug list-item__good-img") or block.find('a', class_="good-info__title")
-            name = item_link.text.replace(', ', ' ').strip() if item_link else 'Не задано'
+
+            name = item_link.text.replace(',', ' ').strip() if item_link else 'Не задано'
             cod1s = item_link.get('href').split('/')[4] if item_link else 'Не задано'
             characteristicid = item_link.get('href').split('=')[-1] if item_link else 'Не задано'
 
