@@ -44,12 +44,11 @@ async def main():
 
     # Загружаем конфиг в переменную config
     config: Config = load_config()
-
     # Инициализируем бот и диспетчер
     # с прокси
-    bot: Bot = Bot(token=config.tg_bot.token, session = AiohttpSession(proxy=config.tg_bot.proxy), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
-    # без прокси
-    #bot: Bot = Bot(token=config.tg_bot.token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    bot: Bot = Bot(token=config.tg_bot.token, session = AiohttpSession(proxy=config.tg_bot.proxy), default=DefaultBotProperties(parse_mode='HTML'))
+    # Инициализируем бот и диспетчер
+    #bot: Bot = Bot(token=config.tg_bot.token, default=DefaultBotProperties(parse_mode='HTML'))
     dp: Dispatcher = Dispatcher()
 
     # Отправка сообщения при запуске
