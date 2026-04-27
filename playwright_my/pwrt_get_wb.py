@@ -73,7 +73,7 @@ async def superdata():
     sup = []
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False, args=[
+        browser = await p.chromium.launch(headless=True, args=[
             '--disable-blink-features=AutomationControlled',
             '--no-sandbox',
             '--disable-setuid-sandbox',
