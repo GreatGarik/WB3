@@ -51,6 +51,7 @@ async def main():
     #bot: Bot = Bot(token=config.tg_bot.token, default=DefaultBotProperties(parse_mode='HTML'))
     dp: Dispatcher = Dispatcher()
 
+
     # Отправка сообщения при запуске
     await bot.send_message(config.tg_bot.admin_id, text='Бот запущен')
     await send_message(bot, config.tg_bot.admin_id, config.tg_bot.katerina_id)
