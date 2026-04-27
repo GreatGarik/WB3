@@ -4,7 +4,7 @@ import random
 
 from aiogram import Bot, Dispatcher
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-
+from aiogram.client.session.aiohttp import AiohttpSession
 from config_data.config import Config, load_config
 from handlers import user_handlers, other_handlers
 from keyboards.menu_button import set_main_menu
@@ -46,7 +46,10 @@ async def main():
     config: Config = load_config()
 
     # Инициализируем бот и диспетчер
-    bot: Bot = Bot(token=config.tg_bot.token, default=DefaultBotProperties(parse_mode='HTML'))
+    # с прокси
+    bot: Bot = Bot(token=config.tg_bot.token, session = AiohttpSession(proxy=config.tg_bot.proxy), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    # без прокси
+    #bot: Bot = Bot(token=config.tg_bot.token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp: Dispatcher = Dispatcher()
 
     # Отправка сообщения при запуске
