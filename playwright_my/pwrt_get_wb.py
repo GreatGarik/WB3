@@ -1,96 +1,17 @@
 import logging
+import re
 from time import sleep
 from playwright.async_api import async_playwright, expect
 from bs4 import BeautifulSoup
 import asyncio
 
-'''
-async def superdata():
-    sup = []
-
-    # открыть соединение
-    async with async_playwright() as p:
-        # инициализация браузера (без видимого открытия браузера)
-        # browser = p.chromium.launch()
-
-        # инициализация браузера (с явным открытием браузера)
-        browser = await p.chromium.launch(headless=False, args=[
-        '--disable-blink-features=AutomationControlled',
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-infobars',
-        '--disable-extensions',
-        '--window-size=1920,1080'
-    ])
-
-        # инициализация страницы
-        
-        #context = await browser.new_context(
-        #    user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        #)
-        
-        context = await browser.new_context(
-            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            storage_state='state.json'
-        )
-
-
-
-        # переход по url адресу:
-        page = await context.new_page()
-        # Отключение автоматизации
-        await page.evaluate("navigator.__proto__.webdriver = undefined")
-        await page.goto('https://www.wildberries.ru/lk/basket')
-        #await page.wait_for_timeout(5000)
-        #await asyncio.sleep(120)
-        await page.wait_for_selector('.basket-section__header', timeout=10000)
-
-
-        await context.storage_state(path='state.json')
-
-        # await page.goto('https://www.wildberries.ru/lk/basket')
-
-        soup = BeautifulSoup(await page.content(), 'html.parser')
-        #soup = BeautifulSoup(await page.content(), 'lxml')
-        tst = soup.find_all('a', class_="good-info__title j-product-popup")
-        rrr = soup.find_all('div', class_="list-item__price-new")
-
-        await browser.close()
-
-        #name_list = [item.text.replace(', ', ' ').strip() for item in tst]
-        prices_list = [i.text.replace(u'\xa0', u'').strip('₽') for i in rrr]
-        #print(*zip(name_list, prices_list))
-        for number, item in enumerate(tst[:len(prices_list)]):
-
-            cod1s: str = item.get('href').split('/')[4]
-            characteristicid: str = item.get('href').split('=')[-1]
-            name: str = item.text.replace(', ', ' ').strip()
-            sto: int = 5 # заглушка
-            try:
-                sup.append({'keys': cod1s + '-' + characteristicid,
-                            'name': name,
-                            'prices': int(prices_list[number]),
-                            'qty':sto,
-                            'size': characteristicid})
-            except KeyError:
-                pass
-        # cookies = await context.cookies()
-        # сделать скриншот
-        # print(cookies)
-        #print(sup)
-        return sup
-        
-'''
-
-
 async def fetch_page_content(page):
     """Переходит на страницу, делает скриншот и возвращает её содержимое."""
     await page.goto('https://www.wildberries.ru/lk/basket')
-    # Делаем скриншот
-    await page.screenshot(path='basket_screenshot1.png', full_page=True)
     # Ожидание загрузки нужного селектора
     try:
         await page.wait_for_selector('.basket-section__header', timeout=10000)
+        await asyncio.sleep(90)
         # Делаем скриншот
         await page.screenshot(path='basket_screenshot.png', full_page=True)
     except Exception as e:
@@ -106,18 +27,33 @@ async def extract_data(soup):
     for block in product_blocks:
         try:
             # Извлечение названия товара и его ссылки
-            item_link = block.find('a', class_="img-plug list-item__good-img") or block.find('a', class_="good-info__title")
-
-            name = item_link.text.replace(',', ' ').strip() if item_link else 'Не задано'
+            item_link = (block.find('a', class_="img-plug list-item__good-img j-product-popup")
+                         or block.find('a', class_="good-info__title j-product-popup")
+                         or block.find('a', class_="good-info__title"))
+            name = item_link.get('title') or ''
+            if not name:
+                img = item_link.find('img')
+                name = img.get('alt') if img and img.get('alt') else ''
+            if not name:
+                name_span = block.find('span', class_="good-info__good-name")
+                name = name_span.get_text(strip=True) if name_span else ''
+            if not name:
+                name = 'Не задано'
+            name = name.replace(', ', ' ').strip()
             cod1s = item_link.get('href').split('/')[4] if item_link else 'Не задано'
             characteristicid = item_link.get('href').split('=')[-1] if item_link else 'Не задано'
 
-            # Извлечение цен
-            price_divs = block.find_all('div', class_="list-item__price-new")
-            prices = [int(price_div.text.replace(u'\xa0', '').strip('₽')) for price_div in price_divs if
-                      price_div.text.replace(u'\xa0', '').strip('₽').isdigit()]
+            # Извлечение цен — ищем все элементы внутри блока, где может быть цена
+            price_elems = block.select(
+                '.list-item__price-wallet, .list-item__price-new, .list-item__price')  # расширенный селектор
+            prices = []
+            for el in price_elems:
+                text = el.get_text(separator=' ', strip=True)
+                m = re.search(r'(\d[\d\s]*)', text)  # находит число с возможными неразрывными пробелами
+                if m:
+                    num = int(m.group(1).replace('\xa0', '').replace(' ', ''))
+                    prices.append(num)
 
-            # Выбор минимальной цены, если она есть
             price = min(prices) if prices else 0
 
             items.append({
@@ -131,6 +67,7 @@ async def extract_data(soup):
             logging.error(f"Ошибка при извлечении данных: {e}")
 
     return items
+
 
 async def superdata():
     sup = []
@@ -151,10 +88,13 @@ async def superdata():
         page = await context.new_page()
         await page.evaluate("navigator.__proto__.webdriver = undefined")
 
+
         try:
             content = await fetch_page_content(page)
+            #await asyncio.sleep(120)
             soup = BeautifulSoup(content, 'html.parser')
             sup = await extract_data(soup)
+            #print(sup)
             await context.storage_state(path='state.json')
         except Exception as e:
             logging.error(f"Произошла ошибка: {e}")

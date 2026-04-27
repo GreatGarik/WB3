@@ -7,6 +7,7 @@ class TgBot:
     token: str  # Токен для доступа к телеграм-боту
     admin_id: int
     katerina_id: int
+    proxy: str
 
 
 @dataclass
@@ -19,4 +20,5 @@ def load_config(path: str | None = None) -> Config:
     env.read_env(path)
     return Config(tg_bot=TgBot(token=env('BOT_TOKEN'),
                                admin_id=int(env('ADMIN_ID')),
-                               katerina_id=int(env('KATERINA_ID'))))
+                               katerina_id=int(env('KATERINA_ID')),
+                               proxy=env('PROXY')))

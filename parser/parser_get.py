@@ -16,6 +16,10 @@ async def parser():
     sup: list[dict] = await superdata()
 
     for item in sup:  # Прогоняем названия товаров
+        if item['keys'] in my_dict and (
+                my_dict[item['keys']]['name'] == '' or my_dict[item['keys']]['name'] == 'Неизвестный товар' or
+                my_dict[item['keys']]['name'].isdigit() or len(my_dict[item['keys']]['name']) <= 5):
+            my_dict[item['keys']]['name'] = item['name'] if item['name'] else 'Неизвестный товар'
         if item['prices'] <= 0:
             continue
         elif item['keys'] not in my_dict:  # Если это новый товар, то добавляем цены
