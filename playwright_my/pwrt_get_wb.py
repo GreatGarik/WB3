@@ -94,7 +94,7 @@ async def superdata():
             #await asyncio.sleep(120)
             soup = BeautifulSoup(content, 'html.parser')
             sup = await extract_data(soup)
-            #print(sup)
+            print(sup)
             await context.storage_state(path='state.json')
         except Exception as e:
             logging.error(f"Произошла ошибка: {e}")
