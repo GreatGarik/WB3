@@ -10,6 +10,7 @@ async def fetch_page_content(page):
     await page.goto('https://www.wildberries.ru/lk/basket')
     # Ожидание загрузки нужного селектора
     # Делаем скриншот
+    await asyncio.sleep(20)
     await page.screenshot(path='basket_screenshot2.png', full_page=True)
     try:
         await page.wait_for_selector('.basket-section__header', timeout=70000)
