@@ -1,5 +1,6 @@
 import logging
 import re
+import random
 from time import sleep
 from playwright.async_api import async_playwright, expect
 from bs4 import BeautifulSoup
@@ -10,11 +11,11 @@ async def fetch_page_content(page):
     await page.goto('https://www.wildberries.ru/lk/basket')
     # Ожидание загрузки нужного селектора
     # Делаем скриншот
-    await asyncio.sleep(40)
+    await asyncio.sleep(random.randint(40, 60))
     await page.screenshot(path='basket_screenshot2.png', full_page=True)
     try:
         await page.wait_for_selector('.basket-section__header', timeout=70000)
-        await asyncio.sleep(60)
+        await asyncio.sleep(random.randint(40, 60))
         # Делаем скриншот
         await page.screenshot(path='basket_screenshot.png', full_page=True)
     except Exception as e:
